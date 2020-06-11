@@ -1,16 +1,10 @@
 import csv
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from model import dbconnect, State, County
+from sqlalchemy import exc
 
 app = Flask(__name__)
-
-
-def import_data(filename):
-    return_list = []
-    with open(filename, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            return_list.append(dict(row))
-    return return_list
 
 
 @app.route('/state/<search_term>')
@@ -20,6 +14,11 @@ def state(search_term):
         if row["State"] == "WA":
             return_list.append(row)
     return jsonify(return_list)
+
+@app.route('/majority_white_counties')
+def majority_white():
+    session = dbconnect()
+    
 
 
 if __name__ == '__main__':
