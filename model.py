@@ -16,25 +16,14 @@ class State(Base):
 
 class County(Base):
     __tablename__ = 'County'
+    __table_args__ = (
+        UniqueConstraint('state_id', 'county_name', name='unique_county_state'),
+    )
     id = Column(Integer, primary_key=True)
     county_name = Column(String)
     majority_white = Column(Float)
     state = relation("State", backref = "County")
     state_id = Column(Integer, ForeignKey('State.id'))
-
-
-# class ComponentCommit(db.Model):
-#     __tablename__ = 'component_version'
-#     __table_args__ = (
-#         db.UniqueConstraint('component_id', 'commit_id', name='unique_component_commit'),
-#     )
-#     id = db.Column(db.Integer, primary_key=True)
-#     component_id = db.Column(db.Integer, db.ForeignKey("component.id"))
-#     commit_id = db.Column(db.String)
-#     branch = db.Column(db.String)
-#     dependencies = db.Column(db.Text)
-#     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-#     updated_date = db.Column(db.DateTime)
 
 
     def __repr__(self):

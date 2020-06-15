@@ -40,6 +40,17 @@ def majority_white(search_term):
     return jsonify(return_list)
     
 
+@app.route('/<search_term_1>/<search_term_2>')
+def county_ethnicities(search_term_1, search_term_2):
+    return_list = []
+    for row in data:
+                if row["State"] == search_term:
+            if row["Ethnicities.White Alone, not Hispanic or Latino"] > search_term_2:
+                return_dict = {
+                    "County":row["County"], 
+                return_list.append(return_dict)
+                
+    return jsonify(return_list)
 
 if __name__ == '__main__':
     data = import_data("county_demographics.csv")
