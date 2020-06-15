@@ -44,13 +44,24 @@ def majority_white(search_term):
 def county_ethnicities(search_term_1, search_term_2):
     return_list = []
     for row in data:
-                if row["State"] == search_term:
-            if row["Ethnicities.White Alone, not Hispanic or Latino"] > search_term_2:
-                return_dict = {
-                    "County":row["County"], 
-                return_list.append(return_dict)
+            if row["State"] == search_term_1:
+                if row["Ethnicities.White Alone, not Hispanic or Latino"] > search_term_2:
+                    return_dict = {
+                        "County":row["County"], 
+                        "Ethnicities.White Alone, not Hispanic or Latino": row["Ethnicities.White Alone, not Hispanic or Latino"], 
+                        "Ethnicities.American Indian and Alaska Native Alone": row["Ethnicities.American Indian and Alaska Native Alone"], 
+                        "Ethnicities.Asian Alone": row["Ethnicities.Asian Alone"], 
+                        "Ethnicities.Black Alone": row["Ethnicities.Black Alone"], 
+                        "Ethnicities.Hispanic or Latino": row["Ethnicities.Hispanic or Latino"], 
+                        "Ethnicities.Native Hawaiian and Other Pacific Islander Alone": row["Ethnicities.Native Hawaiian and Other Pacific Islander Alone"], 
+                        "Ethnicities.Two or More Races": row["Ethnicities.Two or More Races"], 
+                        "Ethnicities.White Alone": row["Ethnicities.White Alone"] 
+                        }
+                    return_list.append(return_dict)
                 
     return jsonify(return_list)
+
+
 
 if __name__ == '__main__':
     data = import_data("county_demographics.csv")
