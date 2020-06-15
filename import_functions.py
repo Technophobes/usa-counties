@@ -19,6 +19,7 @@ def addData(session, data_input):
     county = County()
     county.county_name = data_input["County"]
     county.majority_white = data_input["Ethnicities.White Alone, not Hispanic or Latino"]
+    county.state = state
     session.add(county)
     session.commit()
 
