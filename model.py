@@ -16,9 +16,9 @@ class State(Base):
 
 class County(Base):
     __tablename__ = 'County'
-    # __table_args__ = (
-    #     UniqueConstraint('state_id', 'county_name', name='unique_county_state'),
-    # )
+    __table_args__ = (
+        UniqueConstraint('state_id', 'county_name', name='unique_county_state'),
+    )
     id = Column(Integer, primary_key=True)
     county_name = Column(String)
     majority_white = Column(Float)
