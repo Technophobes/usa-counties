@@ -1,6 +1,6 @@
 from model import State, County, dbconnect
 import csv
-
+from sqlalchemy import exc
 
 def addData(session, data_input):
     try:
@@ -9,12 +9,17 @@ def addData(session, data_input):
         state = State()
         state.state_name = data_input["State"]
         session.add(state)
-    county = County()
-    county.county_name = data_input["County"]
-    county.majority_white = data_input["Ethnicities.White Alone, not Hispanic or Latino"]
-    county.state = state
-    session.add(county)
-    session.commit()
+    try:
+        county = County()
+        county.county_name = data_input["County"]
+        county.majority_white = data_input["Ethnicities.White Alone, not Hispanic or Latino"]
+        county.state = state
+        session.add(county)
+        session.commit()
+        return "OK"
+    except exc.IntegrityError:
+        session.rollback()
+        return "already exists", 400
 
 
 def import_data(filename):
