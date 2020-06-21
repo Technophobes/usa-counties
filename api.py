@@ -4,6 +4,7 @@ from flask_cors import CORS
 from model import dbconnect, State, County
 from sqlalchemy import exc
 from import_functions import import_data
+from model import State, County, dbconnect
 
 app = Flask(__name__)
 
@@ -61,7 +62,42 @@ def county_ethnicities(search_term_1, search_term_2):
                 
     return jsonify(return_list)
 
+@app.route('/state', methods=['POST'])
+def add_state():
+	session = dbconnect()
+	request_dict = request.get_json()
+	try:
+		state_instance = State()
+		state_instance.state_name = request_dict["State"]
+		session.add(state_instance)
+		session.commit()
+		return jsonify(state_instance.id)
+	except exc.IntegrityError:
+		session.rollback()
+		return "already exists", 400
 
+
+@app.route('/county',  methods=['POST'])
+def add_county():
+    session = dbconnect()
+    request_dict = request.get_json()
+    try:
+        state_instance = session.query(State).filter(State.id == request_dict["state_id"]).one()
+    except:
+        return "State does not exist, please add it", 400
+
+    try:
+        county = County()
+        county.county_name = data_input["County"]
+        county.majority_white = data_input["Ethnicities.White Alone, not Hispanic or Latino"]
+        county.state = state_instance
+        session.add(county)
+        session.commit()
+        return jsonify(county.id)
+
+    except exc.IntegrityError:
+        session.rollback()
+        return "already exists", 400
 
 if __name__ == '__main__':
     data = import_data("county_demographics.csv")

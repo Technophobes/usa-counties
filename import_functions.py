@@ -16,10 +16,9 @@ def addData(session, data_input):
         county.state = state
         session.add(county)
         session.commit()
-        return "OK"
     except exc.IntegrityError:
         session.rollback()
-        return "already exists", 400
+        
 
 
 def import_data(filename):
