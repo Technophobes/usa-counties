@@ -1,21 +1,20 @@
-import csv
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from model import dbconnect, State, County
-from sqlalchemy import exc
-from import_functions import import_data
-from model import State, County, dbconnect
+from sqlalchemy import exc 
 
 app = Flask(__name__)
+CORS(app)
 
 
-@app.route('/state/<search_term>')
-def state(search_term):
-    return_list = []
-    for row in data:
-        if row["State"] == search_term:
-            return_list.append(row)
-    return jsonify(return_list)
+# @app.route('/state/<search_term>')
+# def state(search_term):
+#     return_list = []
+#     for row in data:
+#         if row["State"] == search_term:
+#             return_list.append(row)
+#     return jsonify(return_list)
 
 
 # return a list of counties from that state that have a majority of white people and returns all demogrphic data
@@ -88,8 +87,8 @@ def add_county():
 
     try:
         county = County()
-        county.county_name = data_input["County"]
-        county.majority_white = data_input["Ethnicities.White Alone, not Hispanic or Latino"]
+        county.county_name = request_dict["County"]
+        county.majority_white = request_dict["Ethnicities.White Alone, not Hispanic or Latino"]
         county.state = state_instance
         session.add(county)
         session.commit()
@@ -99,6 +98,14 @@ def add_county():
         session.rollback()
         return "already exists", 400
 
+@app.route('/state/<search_term>', methods=['GET'])
+def get_state(search_term):
+	session = dbconnect()
+	try:
+		state_instance = session.query(State).filter(State.state_name == search_term).one()
+		return jsonify(state_instance.id), 200
+	except:
+		return "State doesn't exist in database", 400
+
 if __name__ == '__main__':
-    data = import_data("county_demographics.csv")
     app.run(debug=True)
