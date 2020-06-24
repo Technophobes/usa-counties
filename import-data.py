@@ -3,7 +3,7 @@ import json
 import pandas as pd
 
 
-df = pd.read_csv('county_demographics.csv')
+df = pd.read_csv('short.csv')
 
 
 def wrangle(input_object):
@@ -14,5 +14,6 @@ def wrangle(input_object):
 		state_request = requests.post("http://127.0.0.1:5000/state" , json=pload_state)
 	input_dict["state_id"] = state_request.text
 	requests.post("http://127.0.0.1:5000/county" , json=input_dict)
-	
+
+
 df.apply(wrangle, axis=1)
