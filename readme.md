@@ -7,4 +7,4 @@ To start the worker: `rq worker counties`
 
 The worker runs the function `station_queue.add_station_from_queue` on every item that gets put in the queue.
 
-The api "stations" POST endpoint puts the request data on the queue.
+The api "counties" POST endpoint puts the request data on the queue.

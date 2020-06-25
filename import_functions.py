@@ -31,7 +31,7 @@ def import_data(filename):
 
 session=dbconnect()
 
-imported_counties = import_data("county_demographics.csv")
+imported_counties = import_data("short.csv")
 
 for row in imported_counties:
     addData(session, row)

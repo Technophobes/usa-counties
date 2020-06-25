@@ -3,10 +3,10 @@ from sqlalchemy import exc
 
 def add_county_from_queue(request_dict):
     session = dbconnect()
-    request_dict = request.get_json()
     try:
         state_instance = session.query(State).filter(State.id == request_dict["state_id"]).one()
     except:
+        # wrong
         return "State does not exist, please add it", 400
 
     try:
@@ -16,8 +16,10 @@ def add_county_from_queue(request_dict):
         county.state = state_instance
         session.add(county)
         session.commit()
-        return jsonify(county.id)
+        # removed json below because this is for flask
+        return county.id
 
     except exc.IntegrityError:
         session.rollback()
+        # wrong
         return "already exists", 400
